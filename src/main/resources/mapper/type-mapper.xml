@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="type">
+    <insert id="add" parameterType="type" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO collocation_db.type (
+            typename
+        )
+        VALUES (
+            #{typename}
+        )
+    </insert>
+    <delete id="remove">
+        DELETE FROM collocation_db.type
+        WHERE id = #{id}
+    </delete>
+    <update id="modify">
+        UPDATE collocation_db.type
+        SET
+            typename = #{typename}
+        WHERE id = #{id}
+    </update>
+    <select id="queryAll" resultType="type">
+        SELECT *
+        FROM collocation_db.type
+        ORDER BY id
+    </select>
+    <select id="queryById" resultType="type">
+        SELECT *
+        FROM collocation_db.type
+        WHERE id = #{id}
+    </select>
+</mapper>

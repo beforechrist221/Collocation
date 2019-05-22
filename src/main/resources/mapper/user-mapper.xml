@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+    <insert id="create" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+        insert into collocation_db.user(email, password, updateTime)
+        values (#{email}, #{password},#{updateTime});
+    </insert>
+
+    <select id="signIn" parameterType="user" resultType="user">
+        select *
+        from collocation_db.user where username = #{username} and password = #{password};
+    </select>
+
+    <update id="updateInfo" parameterType="user">
+        update collocation_db.user
+        set username = #{username},
+            gender = #{gender},
+            sign = #{sign},
+            phone = #{phone},
+            updateTime=#{updateTime}
+        where id=#{id}
+    </update>
+
+    <select id="queryUserByEmail" parameterType="string" resultType="user">
+        select *
+        from collocation_db.user
+        where email = #{email}
+    </select>
+
+    <select id="queryUserById" parameterType="int" resultType="user">
+        select *
+        from collocation_db.user
+        where id = #{id}
+    </select>
+
+    <update id="resetAvatar" parameterType="user">
+        update collocation_db.user
+        set avatar = #{avatar}
+        where id = #{id}
+    </update>
+
+    <update id="resetPassword" parameterType="user">
+        update collocation_db.user
+        set password = #{password}
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,71 @@
+spring MyBatis 整合
+
+1.build.gradle
+
+compile 'org.mybatis:mybatis-spring:1.3.2'
+compile 'org.springframework:spring-jdbc:5.1.0.RELEASE'
+
+2.jdbc.properties
+
+jdbc_driverClassName=com.mysql.jdbc.Driver
+jdbc_url=jdbc:mysql:///
+jdbc_username=root
+jdbc_password=root
+
+3.applicationContext.xml
+
+<context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--bean-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc_driverClassName}"/>
+        <property name="url" value="${jdbc_url}"/>
+        <property name="username" value="${jdbc_username}"/>
+        <property name="password" value="${jdbc_password}"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mapper/*-mapper.xml"/>
+        <property name="typeAliasesPackage" value="ssm.demo.model"/>
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+4.controller
+
+去掉try
+
+添加
+//1.
+    @Autowired
+    private SqlSession sqlSession;
+
+// 2.
+    private final SqlSession sqlSession;
+
+    @Autowired
+    public UserController(SqlSession sqlSession) {
+        this.sqlSession = sqlSession;
+    }
+
+//3.
+    private SqlSession sqlSession;
+
+    @Autowired
+    public void setSqlSession(SqlSession sqlSession) {
+        this.sqlSession = sqlSession;
+    }
+
+
+    Dao:中存放通用的CRUD方法 定义通过的数据库
+    通用：跟具体的业务逻辑无关
+
+    Service:定义具体的业务逻辑
+
+    Controller:
+    1.接受请求
+    2.调用service处理请求
+    3.返回响应
+    4.不做具体业务逻辑的处理

@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="collocation">
+    <insert id="create" parameterType="collocation" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO collocation_db.collocation (
+            title, 
+            introduce, 
+            coverPicture,
+            content, 
+            status, 
+            createTime,
+            typeId,
+            userId
+        )
+        VALUES (
+            #{title}, 
+            #{introduce}, 
+            #{coverPicture},
+            #{content}, 
+            #{status}, 
+            now(),
+            #{typeId},
+            #{userId}
+        )
+    </insert>
+    <delete id="remove">
+        DELETE FROM collocation_db.collocation
+        WHERE collocation.id = #{id}
+    </delete>
+    <update id="modify">
+        UPDATE collocation_db.collocation
+        SET
+            title = #{title}, 
+            introduce = #{introduce},
+            content = #{content}, 
+            status = #{status},
+            typeId = #{typeId},
+            createTime = now(),
+            lookData = #{lookData}
+        WHERE collocation.id = #{id}
+    </update>
+
+    <!--<select id="queryAll" resultType="collocation">
+        SELECT *
+        FROM collocation_db.collocation
+        ORDER BY id
+    </select>-->
+    <resultMap id="queryAll_map" type="collocation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduce" column="introduce"/>
+        <result property="coverPicture" column="coverPicture"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lookData" column="lookData"/>
+        <result property="typeId" column="typeId"/>
+        <result property="userId" column="userId"/>
+        <association property="type" javaType="type">
+            <id property="id" column="type_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+        <association property="user" javaType="user">
+            <id property="id" column="user_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="sign" column="sign"/>
+            <result property="gender" column="gender"/>
+            <result property="phone" column="phone"/>
+            <result property="updateTime" column="updateTime"/>
+        </association>
+    </resultMap>
+
+    <select id="queryAll"  resultMap="queryAll_map">
+        select c.*,
+               t.id as type_id, t.typename,
+               u.id as user_id, u.email, u.username, u.avatar,u.sign,u.gender,u.phone,u.updateTime
+        from collocation_db.collocation c
+                 inner join collocation_db.type t
+                     on c.typeId = t.id
+                 inner join collocation_db.user u
+                     on c.userId = u.id
+        where c.status = '公开';
+    </select>
+
+    <resultMap id="queryById_map" type="collocation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduce" column="introduce"/>
+        <result property="coverPicture" column="coverPicture"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lookData" column="lookData"/>
+        <result property="typeId" column="typeId"/>
+        <result property="userId" column="userId"/>
+        <association property="type" javaType="type">
+            <id property="id" column="type_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+        <association property="user" javaType="user">
+            <id property="id" column="user_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="sign" column="sign"/>
+            <result property="gender" column="gender"/>
+            <result property="phone" column="phone"/>
+            <result property="updateTime" column="updateTime"/>
+        </association>
+    </resultMap>
+
+    <select id="queryById"  resultMap="queryById_map">
+        select c.*,
+               t.id as type_id, t.typename,
+               u.id as user_id, u.email, u.username, u.avatar,u.sign,u.gender,u.phone,u.updateTime
+        from collocation_db.collocation c
+                 inner join collocation_db.type t
+                     on c.typeId = t.id
+                 inner join collocation_db.user u
+                     on c.userId = u.id
+        where c.id = #{id};
+    </select>
+
+    <resultMap id="queryByUser_map" type="collocation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduce" column="introduce"/>
+        <result property="coverPicture" column="coverPicture"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lookData" column="lookData"/>
+        <result property="typeId" column="typeId"/>
+        <result property="userId" column="userId"/>
+        <association property="type" javaType="type">
+            <id property="id" column="type_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+        <association property="user" javaType="user">
+            <id property="id" column="user_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="sign" column="sign"/>
+            <result property="gender" column="gender"/>
+            <result property="phone" column="phone"/>
+            <result property="updateTime" column="updateTime"/>
+        </association>
+    </resultMap>
+
+    <select id="queryByUser"  resultMap="queryByUser_map">
+        select c.*,
+               t.id as type_id, t.typename,
+               u.id as user_id, u.email, u.username, u.avatar,u.sign,u.gender,u.phone,u.updateTime
+        from collocation_db.collocation c
+                 inner join collocation_db.type t
+                     on c.typeId = t.id
+                 inner join collocation_db.user u
+                     on c.userId = u.id
+        where c.userId = #{id};
+    </select>
+
+    <resultMap id="queryByKeyword_map" type="collocation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduce" column="introduce"/>
+        <result property="coverPicture" column="coverPicture"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lookData" column="lookData"/>
+        <result property="typeId" column="typeId"/>
+        <result property="userId" column="userId"/>
+        <association property="type" javaType="type">
+            <id property="id" column="type_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+        <association property="user" javaType="user">
+            <id property="id" column="user_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="sign" column="sign"/>
+            <result property="gender" column="gender"/>
+            <result property="phone" column="phone"/>
+            <result property="updateTime" column="updateTime"/>
+        </association>
+    </resultMap>
+
+    <select id="queryByKeyword"  resultMap="queryByKeyword_map" parameterType="String">
+        select c.*,
+                t.id as type_id, t.typename,
+                u.id as user_id, u.email, u.username, u.avatar,u.sign,u.gender,u.phone,u.updateTime
+        from collocation_db.collocation c
+                inner join collocation_db.type t
+                  on c.typeId = t.id
+                inner join collocation_db.user u
+                  on c.userId = u.id
+        where 1=1
+        <if test="_parameter != null and _parameter != ''">
+            and c.title like concat('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <resultMap id="queryByType_map" type="collocation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduce" column="introduce"/>
+        <result property="coverPicture" column="coverPicture"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lookData" column="lookData"/>
+        <result property="typeId" column="typeId"/>
+        <result property="userId" column="userId"/>
+        <association property="type" javaType="type">
+            <id property="id" column="type_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+        <association property="user" javaType="user">
+            <id property="id" column="user_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="sign" column="sign"/>
+            <result property="gender" column="gender"/>
+            <result property="phone" column="phone"/>
+            <result property="updateTime" column="updateTime"/>
+        </association>
+    </resultMap>
+
+    <select id="queryByType"  resultMap="queryByType_map">
+        select c.*,
+               t.id as type_id, t.typename,
+               u.id as user_id, u.email, u.username, u.avatar,u.sign,u.gender,u.phone,u.updateTime
+        from collocation_db.collocation c
+                 inner join collocation_db.type t
+                     on c.typeId = t.id
+                 inner join collocation_db.user u
+                     on c.userId = u.id
+        where c.status = '公开' and c.typeId = #{id};
+    </select>
+
+    <resultMap id="queryByLookData_map" type="collocation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduce" column="introduce"/>
+        <result property="coverPicture" column="coverPicture"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lookData" column="lookData"/>
+        <result property="typeId" column="typeId"/>
+        <result property="userId" column="userId"/>
+        <association property="type" javaType="type">
+            <id property="id" column="type_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+        <association property="user" javaType="user">
+            <id property="id" column="user_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="sign" column="sign"/>
+            <result property="gender" column="gender"/>
+            <result property="phone" column="phone"/>
+            <result property="updateTime" column="updateTime"/>
+        </association>
+    </resultMap>
+
+    <select id="queryByLookData"  resultMap="queryByLookData_map">
+        select c.*,
+               t.id as type_id, t.typename,
+               u.id as user_id, u.email, u.username, u.avatar,u.sign,u.gender,u.phone,u.updateTime
+        from collocation_db.collocation c
+                 inner join collocation_db.type t
+                     on c.typeId = t.id
+                 inner join collocation_db.user u
+                     on c.userId = u.id
+        where c.status = '公开'
+        order by c.lookData desc
+        limit 6 offset 0;
+    </select>
+
+    <resultMap id="queryByCreateTime_map" type="collocation">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduce" column="introduce"/>
+        <result property="coverPicture" column="coverPicture"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lookData" column="lookData"/>
+        <result property="typeId" column="typeId"/>
+        <result property="userId" column="userId"/>
+        <association property="type" javaType="type">
+            <id property="id" column="type_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+        <association property="user" javaType="user">
+            <id property="id" column="user_id"/>
+            <result property="email" column="email"/>
+            <result property="username" column="username"/>
+            <result property="avatar" column="avatar"/>
+            <result property="sign" column="sign"/>
+            <result property="gender" column="gender"/>
+            <result property="phone" column="phone"/>
+            <result property="updateTime" column="updateTime"/>
+        </association>
+    </resultMap>
+
+    <select id="queryByCreateTime"  resultMap="queryByCreateTime_map">
+        select c.*,
+               t.id as type_id, t.typename,
+               u.id as user_id, u.email, u.username, u.avatar,u.sign,u.gender,u.phone,u.updateTime
+        from collocation_db.collocation c
+                 inner join collocation_db.type t
+                     on c.typeId = t.id
+                 inner join collocation_db.user u
+                     on c.userId = u.id
+        where c.status = '公开'
+        order by c.createTime desc
+        limit 3 offset 0;
+    </select>
+</mapper>
